@@ -39,7 +39,6 @@ const Path = require("path");
 const child_process = require("child_process");
 
 const config = require('./config.json');
-const offlinePeertubeList = require('./peertube-servers.json');
 
 process.setMaxListeners(0);
 require('events').EventEmitter.defaultMaxListeners = 0
@@ -783,16 +782,14 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 					});
 			}
 
-			let fileRead = offlinePeertubeList;
-
 			try {
 				const res = await fetch(config.peertubesListLink);
-				fileRead = await res.json();
+				return toLegacyList(await res.json());
 			} catch (e) {
-				console.error('No peertube servers list!');
+				console.warn('No peertube servers list!');
 			}
 
-			return toLegacyList(fileRead);
+			return [];
 		},
 
 		getArchivedServers: function() {

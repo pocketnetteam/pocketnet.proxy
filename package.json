@@ -1,11 +1,11 @@
 {
-    "name": "pocketnetproxy",
-    "version": "0.0.1",
+    "name": "pocketnet.proxy",
+    "version": "0.0.2",
     "description": "Pocketnet Proxy library for access to pocketnet network",
     "main": "src/kit.js",
     "scripts": {
         "start": "node cli.js --cli",
-        "build": ""
+        "build": "npm run publish"
     },
     "author": "Pocketnet Team",
     "license": "ISC",
