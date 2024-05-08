@@ -1,0 +1,9 @@
+**/node_modules
+**/data
+**/cert/keyl.pem
+**/cert/certl.pem
+**/downloads
+**/pocketcoind
+**/pocketcoin
+**/logs
+**/heapdump
