@@ -7,7 +7,7 @@
         "start": "node cli.js --cli"
     },
     "author": "Pocketnet Team",
-    "license": "ISC",
+    "license": "Apache-2.0",
     "dependencies": {
         "@seald-io/nedb": "^4.0.4",
         "arch": "^2.2.0",
