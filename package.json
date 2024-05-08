@@ -1,7 +1,7 @@
 {
     "name": "pocketnet.proxy",
-    "version": "0.0.2",
-    "description": "Pocketnet Proxy library for access to pocketnet network",
+    "version": "0.0.3",
+    "description": "Discover the world of Pocketnet (Bastion) for your projects!",
     "main": "src/kit.js",
     "scripts": {
         "start": "node cli.js --cli"

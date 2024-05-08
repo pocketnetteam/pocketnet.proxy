@@ -488,7 +488,7 @@ var state = {
 }
 
 
-const Kit = {
+const kit = {
 
 	manage: {
 		set: {
@@ -1572,4 +1572,4 @@ const Kit = {
 
 
 
-module.exports = Kit
+module.exports = kit
