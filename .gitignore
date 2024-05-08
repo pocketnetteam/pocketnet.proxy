@@ -7,3 +7,5 @@
 **/pocketcoin
 **/logs
 **/heapdump
+
+package-lock.json
