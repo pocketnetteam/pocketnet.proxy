@@ -101,23 +101,27 @@ var cli = {
 }
 
 
+function Cli() {
+    kit.init({
+        node: {
+            dataPath: f.path('pocketcoin')
+        }
+    }).catch(r => {
+        console.log(r)
+        return Promise.resolve()
+    }).then(r => {
 
-kit.init({
-    node: {
-        dataPath: f.path('pocketcoin')
-    }
-}).catch(r => {
-    console.log(r)
-    return Promise.resolve()
-}).then(r => {
+        process.on('SIGTERM', () => {
+            destroy()
+        });
 
-    process.on('SIGTERM', () => {
-        destroy()
-    });
+        process.on('SIGINT', () => {
+            destroy()
+        });
 
-    process.on('SIGINT', () => {
-        destroy()
-    });
+        cli.waitcommand()
+    })
+}
 
-    cli.waitcommand()
-})
+
+module.exports = Cli

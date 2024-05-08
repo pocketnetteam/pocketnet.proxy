@@ -4,8 +4,7 @@
     "description": "Pocketnet Proxy library for access to pocketnet network",
     "main": "src/kit.js",
     "scripts": {
-        "start": "node cli.js --cli",
-        "build": "npm run publish"
+        "start": "node cli.js --cli"
     },
     "author": "Pocketnet Team",
     "license": "ISC",
