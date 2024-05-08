@@ -1,6 +1,6 @@
 {
     "name": "pocketnet.proxy",
-    "version": "0.0.4",
+    "version": "0.0.7",
     "description": "Discover the world of Pocketnet (Bastion) for your projects!",
     "keywords": [
         "pocketnet",
@@ -9,7 +9,7 @@
         "api",
         "sdk"
     ],
-    "main": "src/kit.js",
+    "main": "index.js",
     "scripts": {
         "start": "node cli.js --cli"
     },

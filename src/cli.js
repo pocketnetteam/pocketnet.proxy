@@ -2,39 +2,16 @@ global.MIN_NODES_COUNT = 10
 global.WRITE_LOGS = true
 global.USE_TRUST_NODES_ONLY = false
 global.USE_TLS_NODES_ONLY = false
+global.REVERSEPROXY = true
 
 
 var kit = require('./kit.js');
 var f = require('./functions');
 var readline = require('readline');
-
-//process.env.NODE_ENV = 'production'
-
+const { start } = require('repl');
 
 
-
-var destroy = function (repeat) {
-
-    return kit.destroy().catch(e => {
-
-        if (!repeat) {
-
-            return kit.manage.proxy.detach().then(r => {
-                return destroy(true)
-            })
-        }
-
-        return Promise.resolve()
-
-    }).then(r => {
-        console.log("EXIT")
-        process.exit(0)
-    })
-
-}
-
-
-var cli = {
+var _cli = {
     command: function (input) {
 
         if (!input || input === 'help') {
@@ -78,21 +55,21 @@ var cli = {
             rl.close();
 
             try {
-                cli.command(input).then(r => {
+                _cli.command(input).then(r => {
 
                     console.log(r || "Done")
-                    cli.waitcommand()
+                    _cli.waitcommand()
     
                 }).catch(e => {
     
                     console.error(e || "Error")
-                    cli.waitcommand()
+                    _cli.waitcommand()
     
                 })
             }
             catch(e){
                 console.error(e || "Error")
-                cli.waitcommand()
+                _cli.waitcommand()
             }
           
 
@@ -101,22 +78,47 @@ var cli = {
 }
 
 
-kit.init({
-    node: {
-        dataPath: f.path('pocketcoin')
+const cli = {
+
+    start: function () {
+        kit.init({
+            server: {
+                enabled: true
+            }
+        }).catch(r => {
+            console.log(r)
+            return Promise.resolve()
+        }).then(r => {
+
+            process.on('SIGTERM', () => {
+                cli.destroy()
+            });
+
+            process.on('SIGINT', () => {
+                cli.destroy()
+            });
+
+            _cli.waitcommand()
+        })
+    },
+
+    destroy: function (repeat) {
+        return kit.destroy().catch(e => {
+    
+            if (!repeat) {
+    
+                return kit.manage.proxy.detach().then(r => {
+                    return cli.destroy(true)
+                })
+            }
+    
+            return Promise.resolve()
+    
+        }).then(r => {
+            process.exit(0)
+        })
     }
-}).catch(r => {
-    console.log(r)
-    return Promise.resolve()
-}).then(r => {
 
-    process.on('SIGTERM', () => {
-        destroy()
-    });
+}
 
-    process.on('SIGINT', () => {
-        destroy()
-    });
-
-    cli.waitcommand()
-})
+module.exports = cli

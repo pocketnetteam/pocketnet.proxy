@@ -280,12 +280,6 @@ var Server = function(settings, admins, manage){
 
                     app.all(meta.path, self.authorization[meta.authorization || 'dummy'], function(request, result){
 
-                        if(!self.listening){
-                            result._fail('stopped', 500)
-    
-                            return
-                        }
-
                         meta.action(request.data, request).then(d => {
 
                             result._success(d.data, d.code, d, meta.formatdata)
