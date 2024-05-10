@@ -114,7 +114,7 @@ var Server = function(settings, admins, manage){
             }
         }));
 
-        app.use('/proxydb/nodes', express.static('data/nodes', {
+        app.use('/proxydb/nodes', express.static('nodes', {
             setHeaders : function(res){
                 res.setHeader('Access-Control-Allow-Origin', '*');
             }
@@ -127,10 +127,10 @@ var Server = function(settings, admins, manage){
 
         self.link()
 
-        return self.http(_settings).then(r => {
-            return  self.https(_settings)
-        })
-
+        return Promise.all([ self.http(_settings), self.https(_settings) ])
+            .catch(e => {
+                console.log('init HTTP server', e)
+            })
     }
 
     self.http = function(settings){
@@ -138,13 +138,9 @@ var Server = function(settings, admins, manage){
 
         return new Promise((resolve, reject) => {
 
-            //app.use(express.static(f.path('static')))
-
             httpserver = http.createServer(app)
             
             httpserver.on('listening',function(){
-
-                console.log('listening', port)
 
                 self.httplistening = port
 
@@ -161,6 +157,8 @@ var Server = function(settings, admins, manage){
 
             httpserver.listen(port);
 
+            console.log('HTTP listen on port', port)
+
             resolve()
 
         })
@@ -168,14 +166,10 @@ var Server = function(settings, admins, manage){
     }       
 
     self.https = function(settings){
+        var port = settings.port || 8899
+
         return new Promise((resolve, reject) => {
-            try{
-
-                if (_.isEmpty(settings.ssl)){
-                    reject('sslerror')
-
-                    return
-                }
+            try {
 
                 var cloned = _.clone(settings.ssl)
 
@@ -185,7 +179,7 @@ var Server = function(settings, admins, manage){
 
                 server.on('listening',function(){
 
-                    self.listening = settings.port || 8899
+                    self.listening = port
 
                     
 
@@ -200,9 +194,9 @@ var Server = function(settings, admins, manage){
                     socket.setNoDelay();
                 });
 
-                server.listen(settings.port || 8899);
+                server.listen(port);
 
-                console.log('listen', settings.port || 8899)
+                console.log('HTTPS listen on port', port)
 
             }
             catch(e) {

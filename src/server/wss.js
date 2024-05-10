@@ -503,38 +503,26 @@ var WSS = function(admins, manage){
         
         return new Promise((resolve, reject) => {
 
-            try{
+            try {
             
-                if (_.isEmpty(settings.ssl)){
-                    reject('sslerror')
-
-                    return
-                }
-
                 if(!gcinfointerval) {
                     gcinfointerval = setInterval(self.gc, 10000)
                 }
 
-                createWss(port, settings).then(() => {
-
-                    return createWs(port - 1, settings)
-
-                }).then(resolve).catch(e => {
-                    console.log('init wss', e)
-                    reject(e)
-                })
-
+                Promise.all([ createWss(port, settings), createWs(port - 1, settings) ])
+                    .then(resolve)
+                    .catch(e => {
+                        console.log('init WS server', e)
+                        reject(e)
+                    })
             }
-
             catch(e) {
                 reject(e)
             }
-
         })
     }
 
-    var createWss = function(port, settings){
-
+    var createWss = function(port, settings) {
         return new Promise((resolve, reject) => {
 
             server = new https.createServer(settings.ssl);
@@ -565,6 +553,8 @@ var WSS = function(admins, manage){
             });
 
             server.listen(port);
+
+            console.log('WSS listen on port', port)
 
         })
         
@@ -603,6 +593,8 @@ var WSS = function(admins, manage){
             });
 
             httpserver.listen(port);
+
+            console.log('WS listen on port', port)
 
         })
     }

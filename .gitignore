@@ -7,5 +7,6 @@
 **/pocketcoin
 **/logs
 **/heapdump
+**/.vscode
 
 package-lock.json

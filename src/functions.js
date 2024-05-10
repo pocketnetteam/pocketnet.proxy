@@ -106,27 +106,29 @@ f.esc = function(str) {
     });
 }
 
-f.path = function(_path){
+f.path = function(_path) {
 
-    var iscli = process.argv.find(function(el) { return el == '--cli'; })
+    return path.join(global.BASE_DATA_PATH, _path)
 
-    if (iscli){
-        return path.resolve('./', _path)
-    }
+    // var iscli = process.argv.find(function(el) { return el == '--cli'; })
+
+    // if (iscli){
+    //     return path.resolve('./', _path)
+    // }
     
     
-    ////electron
-    var isDevelopment = process.argv.find(function(el) { return el == '--development'; })
+    // ////electron
+    // var isDevelopment = process.argv.find(function(el) { return el == '--development'; })
 
-    if (isDevelopment){
-        return path.resolve('./proxy16/', _path)
-    }
-    else{
-    	if(process.platform == 'linux'){
-    		return path.join(process.env.HOME, _path)
-    	}
-        return path.join(path.dirname(process.execPath), _path)
-    }
+    // if (isDevelopment){
+    //     return path.resolve('./proxy16/', _path)
+    // }
+    // else{
+    // 	if(process.platform == 'linux'){
+    // 		return path.join(process.env.HOME, _path)
+    // 	}
+    //     return path.join(path.dirname(process.execPath), _path)
+    // }
 
     
 }
@@ -920,6 +922,11 @@ f.unitFormatter = function(num, digits) {
       return num >= item.value;
     });
     return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
-  }
+}
+
+f.toBool = function(val){ 
+    var num = +val;
+    return !isNaN(num) ? !!num : !!String(val).toLowerCase().replace(!!0,'');
+}
 
 module.exports = f

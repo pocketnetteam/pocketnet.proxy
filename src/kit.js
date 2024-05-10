@@ -6,7 +6,7 @@ var cloneDeep = require('clone-deep');
 var tcpPortUsed = require('tcp-port-used');
 _ = 	require("underscore");
 var fs = require('fs');
-
+var path = require('path');
 
 var Pocketnet = require('./pocketnet.js');
 var Logger = require('./logger.js');
@@ -15,21 +15,26 @@ const { base64encode, base64decode } = require('nodejs-base64');
 var f = require('./functions');
 const { deep } = require("./functions");
 ////
+global.BASE_DATA_PATH = process.env["BASE_DATA_PATH"] ?? path.join(process.cwd(), 'data')
+global.MIN_NODES_COUNT = parseInt(process.env["MIN_NODES_COUNT"] ?? 10)
+global.WRITE_LOGS = f.toBool(process.env["WRITE_LOGS"])
+global.USE_TRUST_NODES_ONLY = f.toBool(process.env["USE_TRUST_NODES_ONLY"])
+global.USE_TLS_NODES_ONLY = f.toBool(process.env["USE_TLS_NODES_ONLY"])
+global.REVERSE_PROXY = f.toBool(process.env["REVERSE_PROXY"])
+////
 var db = null;
 var proxy = null;
 var nedbkey = 'settings';
-var settingsPath = 'data/settings'
-////
 var settings = {};
 
 var pocketnet = new Pocketnet()
 var test = _.indexOf(process.argv, '--test') > -1 || global.TESTPOCKETNET
-var reverseproxy = _.indexOf(process.argv, '--reverseproxy') > -1 || global.REVERSEPROXY
+var reverseproxy = _.indexOf(process.argv, '--reverseproxy') > -1 || global.REVERSE_PROXY
 
 typeof global.EXPERIMENTALNODES == 'undefined' ? global.EXPERIMENTALNODES = _.indexOf(process.argv, '--experimentalnodes') > -1 : false
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 1;
 
-var logger = new Logger(['general', 'rpc', 'system', 'remote', 'firebase', 'nodecontrol', 'peertube', 'transports', 'logs290323']).init()
-
+var logger = new Logger(['general', 'rpc', 'system', 'remote', 'firebase', 'nodecontrol', 'peertube', 'transports', 'logs290323'])
 logger.setlevel('debug');
 
 // Mainnet ports
@@ -219,12 +224,12 @@ var defaultSettings = {
 	testkeys : [],
 	
 	nodes : {
-		dbpath : 'data/nodes'
+		dbpath : 'nodes'
 	},
 
 	tor : {
-		dbpath2 : 'data/tordb',
-		path : 'data/tor',
+		dbpath2 : 'tordb',
+		path : 'tor',
 		enabled2: 'neveruse',
 		useSnowFlake : false,
 		customObfs4 : false,
@@ -258,12 +263,12 @@ var defaultSettings = {
 
 	firebase : {
 		key : "",
-		dbpath : 'data/firebase',
+		dbpath : 'firebase',
 		id : ''
 	},
 
 	wallet : {
-		dbpath : 'data/wallet',
+		dbpath : 'wallet',
 		addresses : {
 			registration : {
 				privatekey : "",
@@ -287,7 +292,7 @@ var defaultSettings = {
 	},
 
     node: {
-		dbpath : 'data/node',
+		dbpath : 'node',
         enabled: false,
         binPath: '',
 		dataPath: '', //// deleted
@@ -295,15 +300,15 @@ var defaultSettings = {
     },
 	
 	bots : {
-		dbpath : 'data/bots',
+		dbpath : 'bots',
 	},
 
 	atransactions : {
-		dbpath : 'data/atransactions',
+		dbpath : 'atransactions',
 	},
 
 	proxies : {
-		dbpath : 'data/proxies',
+		dbpath : 'proxies',
 		explore : true
 	},
 
@@ -319,7 +324,7 @@ var defaultSettings = {
 	}*/
 	
 	slide : {
-		dbpath : 'data/slide',
+		dbpath : 'slide',
 	},
 }
 
@@ -471,19 +476,6 @@ var state = {
 		return state.rewrite().then(r => {
 			return kit.proxy()
 		})
-	},
-	prepare : function(){
-	
-		try{
-			if(!fs.existsSync(f.path('data'))){
-				fs.mkdirSync(f.path('data'))
-			}
-		}
-		catch(e){
-		}
-		
-		
-			
 	}
 }
 
@@ -886,7 +878,7 @@ const kit = {
 
 						if (!fbkjsonfile) return Promise.reject('empty')
 
-						var path = 'data/pocketnet-firebase-adminsdk.json'
+						var path = 'pocketnet-firebase-adminsdk.json'
 
 						fbkjsonfile = fbkjsonfile.split(',')[1]
 
@@ -1461,7 +1453,7 @@ const kit = {
 
 	init: function (environmentDefaultSettings, hck) {
 
-		state.prepare()
+		logger.init()
 
 		var settings = defaultSettings;
 
@@ -1473,7 +1465,7 @@ const kit = {
 		settings = state.expand(environmentDefaultSettings, settings)
 
 		db = new Datastore({
-			filename: f.path(settingsPath),
+			filename: f.path('settings'),
 		});
 
 		return new Promise((resolve, reject) => {

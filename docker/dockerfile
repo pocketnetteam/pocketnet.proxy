@@ -1,0 +1,10 @@
+FROM node:16-slim
+
+EXPOSE 8898 8098
+
+WORKDIR /usr/src/app
+COPY . .
+
+RUN npm install pocketnet.proxy
+
+ENTRYPOINT [ "/usr/local/bin/node", "entrypoint.js" ]
