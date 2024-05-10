@@ -64,7 +64,7 @@ var Logger = function(_loggers){
     var transports = function(key){
 
         var tr = [
-            //new winston.transports.Console({}),
+            // new winston.transports.Console({}),
             new wsstransport({ logger : self })
         ]
 
@@ -98,7 +98,7 @@ var Logger = function(_loggers){
         if(global.WRITE_LOGS){
             try{
                 if(!fs.existsSync(f.path('logs'))){
-                    fs.mkdirSync(f.path('logs'))
+                    fs.mkdirSync(f.path('logs'), { recursive: true })
                 }
     
                 writelogs = true
@@ -118,8 +118,9 @@ var Logger = function(_loggers){
    
 
     self.init = function(){
-
+        
         self.prepare()
+
         _.each(loggers, function(key){
 
             var logger = winston.loggers.add(key, { 

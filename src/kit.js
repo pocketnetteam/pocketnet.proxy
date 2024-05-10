@@ -34,8 +34,8 @@ var reverseproxy = _.indexOf(process.argv, '--reverseproxy') > -1 || global.REVE
 typeof global.EXPERIMENTALNODES == 'undefined' ? global.EXPERIMENTALNODES = _.indexOf(process.argv, '--experimentalnodes') > -1 : false
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 1;
 
-var logger = new Logger(['general', 'rpc', 'system', 'remote', 'firebase', 'nodecontrol', 'peertube', 'transports', 'logs290323'])
-logger.setlevel('debug');
+var logger = new Logger(['general', 'rpc', 'system', 'remote', 'firebase', 'nodecontrol', 'peertube', 'transports']).init()
+logger.setlevel(process.env['LOG_LEVEL'] ?? 'info')
 
 // Mainnet ports
 const WebPort = 38081;
@@ -476,6 +476,16 @@ var state = {
 		return state.rewrite().then(r => {
 			return kit.proxy()
 		})
+	},
+
+	init : function(){
+		try {
+			if(!fs.existsSync(f.path())) {
+				fs.mkdirSync(f.path(), { recursive: true })
+			}
+		}
+		catch(e){
+		}
 	}
 }
 
@@ -1453,8 +1463,8 @@ const kit = {
 
 	init: function (environmentDefaultSettings, hck) {
 
-		logger.init()
-
+		state.init()
+		
 		var settings = defaultSettings;
 
 		if (!environmentDefaultSettings)
