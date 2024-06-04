@@ -1,4 +1,7 @@
 const kit = require("./src/kit.js")
+const f = require("./src/functions.js");
+
+console.log(f.addzeros('6715'));
 
 kit.init({
 
