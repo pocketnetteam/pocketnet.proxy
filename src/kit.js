@@ -1464,7 +1464,7 @@ const kit = {
 	start: function(settings = {}){
 		state.init()
 
-		kit.startproxy(settings)
+		return kit.startproxy(settings)
 	},
 
 	init: function (environmentDefaultSettings, hck) {
