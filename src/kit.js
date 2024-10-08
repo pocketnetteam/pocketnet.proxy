@@ -1445,7 +1445,7 @@ const kit = {
 				proxy.userDataPath = hck.userDataPath
 			}
 
-			return proxy.kit.init()
+			return proxy.kit.init(hck.list)
 		}
 
 
@@ -1459,6 +1459,12 @@ const kit = {
 		if (proxy) return Promise.resolve(proxy)
 
 		return Promise.reject('proxynull')
+	},
+
+	start: function(settings = {}){
+		state.init()
+
+		kit.startproxy(settings)
 	},
 
 	init: function (environmentDefaultSettings, hck) {

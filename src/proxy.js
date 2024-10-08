@@ -929,11 +929,11 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 			}
 		},
 
-		init: function () {
+		init: function (list) {
 
 			status = 1
 
-			return this.initlist(['server', 'wss', 'nodeManager', 'wallet', 'firebase', 'nodeControl', 'torapplications', 'exchanges', 'peertube', 'bots', 'aTransactions', 'notifications']).then(r => {
+			return this.initlist(list || ['server', 'wss', 'nodeManager', 'wallet', 'firebase', 'nodeControl', 'torapplications', 'exchanges', 'peertube', 'bots', 'aTransactions', 'notifications']).then(r => {
 
 				status = 2
 
