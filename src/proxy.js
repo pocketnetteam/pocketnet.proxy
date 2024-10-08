@@ -15,6 +15,7 @@ const Firebase = require('../proxy/firebase');
 */
 var os = require('os');
 var Server = require('./server/https.js');
+var Cache = require('./server/cache.js');
 var WSS = require('./server/wss.js');
 var Firebase = require('./server/firebase.js');
 var TranslateApi = require('./server/translateapi.js');
@@ -51,6 +52,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 		self.reverseproxy = reverseproxy
 
 	var server = new Server(settings.server, settings.admins, manage);
+	var cache = new Cache(settings.server);
 	var wss = new WSS(settings.admins, manage);
 	var pocketnet = new Pocketnet();
 	var nodeControl = new NodeControl(settings.node, self);
@@ -89,6 +91,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 		systemnotify, notifications,
 		logger,
 		translateapi,
+		cache,
 		proxy: self
 	})
 
@@ -283,6 +286,15 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 
 		return count
 
+	}
+
+	self.cache = {
+		init : function(){
+			return cache.init()
+		},	
+		destroy: function () {
+			return cache.destroy()
+		},
 	}
 
 	self.server = {
@@ -933,7 +945,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 
 			status = 1
 
-			return this.initlist(list || ['server', 'wss', 'nodeManager', 'wallet', 'firebase', 'nodeControl', 'torapplications', 'exchanges', 'peertube', 'bots', 'aTransactions', 'notifications']).then(r => {
+			return this.initlist(list || ['server', 'wss', 'nodeManager', 'wallet', 'firebase', 'nodeControl', 'torapplications', 'exchanges', 'peertube', 'bots', 'aTransactions', 'notifications', 'cache']).then(r => {
 
 				status = 2
 
@@ -1324,7 +1336,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 								return
 							}
 
-							server.cache.wait(method, cparameters, function (waitstatus, smartdata) {
+							cache.wait(method, cparameters, function (waitstatus, smartdata) {
 
 								if (waitstatus == 'smart'){
 									smartresult = smartdata
@@ -1355,7 +1367,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 							});
 						}
 
-						var cached = server.cache.get(method, cparameters, cachehash);
+						var cached = cache.get(method, cparameters, cachehash);
 
 
 						if (typeof cached != 'undefined') {
@@ -1407,7 +1419,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 
 							// console.log('then', data, method, cparameters, data, node)
 							if (noderating || options.cache){
-								server.cache.set(method, cparameters, data, node.height());
+								cache.set(method, cparameters, data, node.height());
 							}
 
 							time.ready = performance.now() - timep
@@ -1425,7 +1437,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 					.catch((e) => {
 
 						if (_waitstatus == 'execute'){
-							server.cache.remove(method, cparameters);
+							cache.remove(method, cparameters);
 						}
 
 						return Promise.reject({
@@ -1840,7 +1852,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 					try{
 
 						remote.clear()
-						server.cache.clear()
+						cache.clear()
 
 						f.createfolder(filename)
 
@@ -1920,7 +1932,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 					if (!message.A)
 						return Promise.reject({ error: 'Unauthorized', code: 401 });
 
-						server.cache.clear()
+						cache.clear()
 
 					return Promise.resolve('success');
 
@@ -2569,7 +2581,7 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 		},
 	};
 
-	peertube.extendApi(self.api.peertube, server.cache)
+	peertube.extendApi(self.api.peertube, cache)
 
 	self.wallet.events()
 

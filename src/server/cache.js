@@ -726,6 +726,8 @@ var Cache = function(p){
 
         if(!workerInterval)
             workerInterval = setInterval(worker, workerTime)
+
+        return Promise.resolve()
     }
 
     self.destroy = function(){
@@ -738,6 +740,9 @@ var Cache = function(p){
             clearInterval(workerInterval)
             workerInterval = null
         }
+
+        return Promise.resolve()
+
     }
 
     return self;

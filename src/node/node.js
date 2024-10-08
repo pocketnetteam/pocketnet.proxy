@@ -238,8 +238,8 @@ var Node = function(options, manager){
             lastnodeblock = block
 
 
-            if (manager && manager.server && manager.server.cache){
-                manager.server.cache.block(block)    
+            if (manager && manager.cache){
+                manager.cache.block(block)    
             }
 
         }

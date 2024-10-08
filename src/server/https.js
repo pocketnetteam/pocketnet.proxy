@@ -2,7 +2,7 @@ var https = require('https');
 var http = require('http');
 var express = require('express');
 var Middle = require('./middle.js');
-var Cache = require('./cache.js');
+//var Cache = require('./cache.js');
 var Iplimiter = require('./iplimiter.js');
 var compression = require('compression')
 
@@ -23,7 +23,7 @@ var Server = function(settings, admins, manage){
     var startedDate = null
     var printstatsInterval = null
 
-    self.cache = new Cache({ dontCache: settings.dontCache})
+    //self.cache = new Cache({ dontCache: settings.dontCache })
     self.listening = false;
     self.httplistening = false;
 
@@ -72,7 +72,7 @@ var Server = function(settings, admins, manage){
 
         startedDate = new Date()
 
-        self.cache.init()
+        //self.cache.init()
 
         app.use(async (request, result, next) => {
 
@@ -229,7 +229,7 @@ var Server = function(settings, admins, manage){
 
         middle.clear()
 
-        self.cache.destroy()
+        //self.cache.destroy()
 
         self.listening = false
         self.httplistening = false
@@ -259,7 +259,7 @@ var Server = function(settings, admins, manage){
         return {
             iplimiter : iplimiter.info(),
             middle : middle.info(compact),
-            cache : self.cache.info(compact),
+            cache : self.cache ? self.cache.info(compact) : {},
             listening : self.listening,
             httplistening : self.httplistening,
             startedDate
