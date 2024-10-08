@@ -15,6 +15,8 @@ var Cache = function(p){
     var workerTime = 200
     var waittime = 8500
 
+    var inited = false
+
     var ckeys = {}
 
     var worker = function(){
@@ -389,6 +391,10 @@ var Cache = function(p){
     }
 
     self.set = function(key, params, data, block, ontime, cachehash){
+
+        if(!inited){
+            return
+        }
         
         if (ckeys[key]){
 
@@ -442,6 +448,11 @@ var Cache = function(p){
     }
 
     self.get = function(key, params, cachehash){
+
+        if(!inited){
+            return undefined
+        }
+
         if (ckeys[key]){
 
 
@@ -484,6 +495,10 @@ var Cache = function(p){
 
     self.setsmart = function(key, data){
 
+        if(!inited){
+            return undefined
+        }
+
         var c = ckeys[key]
 
         if(!c.smart) return
@@ -504,6 +519,9 @@ var Cache = function(p){
 
     self.getsmart = function(key, params){
 
+        if(!inited){
+            return undefined
+        }
 
         var c = ckeys[key]
 
@@ -535,6 +553,12 @@ var Cache = function(p){
     }
 
     self.wait = function(key, params, clbk, cachehash){
+
+        if(!inited){
+            clbk('notinited')
+
+            return
+        }
 
         if (!ckeys[key]){
             clbk('nocache')
@@ -602,6 +626,10 @@ var Cache = function(p){
     }
 
     self.block = function(block){
+
+        if(!inited){
+            return undefined
+        }
 
 
         _.each(ckeys, function(k, key){
@@ -727,6 +755,9 @@ var Cache = function(p){
         if(!workerInterval)
             workerInterval = setInterval(worker, workerTime)
 
+
+        inited = true
+
         return Promise.resolve()
     }
 
@@ -740,6 +771,8 @@ var Cache = function(p){
             clearInterval(workerInterval)
             workerInterval = null
         }
+
+        inited = false
 
         return Promise.resolve()
 
