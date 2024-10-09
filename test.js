@@ -17,7 +17,6 @@ kit.start({list : ['cache', 'nodeManager']}).then(() => {
     var proxy = kit.proxys()
 
     proxy.api.node.rpc.action({method : 'getnodeinfo', parameters : []}).then(r => {
-        console.log("result", r)
     }).catch(e => {
         console.log("error", e)
     })

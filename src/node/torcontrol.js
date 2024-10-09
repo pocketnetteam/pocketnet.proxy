@@ -20,8 +20,6 @@ class Helpers {
 
             return { exists: true, isFolder: stat.isDirectory()};
         }catch (e) {
-            console.warn("Tor file was not found", pathname, e.message);
-
             return { exists: false, isFolder: null };
         }
     }
@@ -161,6 +159,7 @@ class TorControl {
     }
 
     folders = async() => {
+        
 
         const check = await this.helpers.checkPath(this.getsettingspath())
 
