@@ -15,12 +15,14 @@ const { base64encode, base64decode } = require('nodejs-base64');
 var f = require('./functions');
 const { deep } = require("./functions");
 ////
-global.BASE_DATA_PATH = process.env["BASE_DATA_PATH"] ?? path.join(process.cwd(), 'data')
-global.MIN_NODES_COUNT = parseInt(process.env["MIN_NODES_COUNT"] ?? 10)
-global.WRITE_LOGS = f.toBool(process.env["WRITE_LOGS"])
-global.USE_TRUST_NODES_ONLY = f.toBool(process.env["USE_TRUST_NODES_ONLY"])
-global.USE_TLS_NODES_ONLY = f.toBool(process.env["USE_TLS_NODES_ONLY"])
-global.REVERSE_PROXY = f.toBool(process.env["REVERSE_PROXY"])
+
+if(typeof global.BASE_DATA_PATH == 'undefined') global.BASE_DATA_PATH = process.env["BASE_DATA_PATH"] ?? path.join(process.cwd(), 'data')
+if(typeof global.MIN_NODES_COUNT == 'undefined') global.MIN_NODES_COUNT = parseInt(process.env["MIN_NODES_COUNT"] ?? 10)
+if(typeof global.WRITE_LOGS == 'undefined') global.WRITE_LOGS = f.toBool(process.env["WRITE_LOGS"])
+if(typeof global.USE_TRUST_NODES_ONLY == 'undefined') global.USE_TRUST_NODES_ONLY = f.toBool(process.env["USE_TRUST_NODES_ONLY"])
+if(typeof global.USE_TLS_NODES_ONLY == 'undefined') global.USE_TLS_NODES_ONLY = f.toBool(process.env["USE_TLS_NODES_ONLY"])
+if(typeof global.REVERSE_PROXY == 'undefined') global.REVERSE_PROXY = f.toBool(process.env["REVERSE_PROXY"])
+
 ////
 var db = null;
 var proxy = null;

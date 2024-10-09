@@ -925,6 +925,10 @@ f.unitFormatter = function(num, digits) {
 }
 
 f.toBool = function(val){ 
+
+    if(typeof val == 'undefined') return false
+
+
     var num = +val;
     return !isNaN(num) ? !!num : !!String(val).toLowerCase().replace(!!0,'');
 }
