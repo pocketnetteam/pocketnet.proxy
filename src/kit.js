@@ -1461,10 +1461,12 @@ const kit = {
 		return Promise.reject('proxynull')
 	},
 
-	start: function(settings = {}){
+	start: function(st = {}, customsettings = {}){
 		state.init()
 
-		return kit.startproxy(settings)
+		state.apply(state.expand(defaultSettings, customsettings))
+
+		return kit.startproxy(st)
 	},
 
 	init: function (environmentDefaultSettings, hck) {
