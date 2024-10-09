@@ -1455,6 +1455,12 @@ const kit = {
 
 	},
 
+	proxys : function () {
+		if (proxy) return proxy
+
+		return null
+	},
+
 	proxy: function () {
 		if (proxy) return Promise.resolve(proxy)
 
