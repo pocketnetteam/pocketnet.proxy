@@ -463,7 +463,11 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 
 		sendwithprivatekey: function ({ address, amount, key }) {
 			return wallet.kit.sendwithprivatekey(address, amount, key)
-		}
+		},
+
+		getunspentswithprivatekey: function ({ key }) {
+			return wallet.kit.getunspentswithprivatekey(key)
+		},
 	}
 
 	self.systemnotify = {
@@ -2349,6 +2353,23 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 		},
 
 		wallet: {
+			getunspentswithprivatekey: {
+				path: '/wallet/getunspentswithprivatekey',
+				authorization: false,
+				action: function (p) {
+					return self.wallet
+						.getunspentswithprivatekey(p)
+						.then((r) => {
+							return Promise.resolve({
+								data: r,
+							});
+						})
+						.catch((e) => {
+							return Promise.reject(e);
+						});
+				},
+			},
+			
 			sendwithprivatekey: {
 				path: '/wallet/sendwithprivatekey',
 				authorization: false,
