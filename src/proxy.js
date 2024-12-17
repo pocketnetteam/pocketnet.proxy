@@ -690,7 +690,15 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 		},
 
 		waitreadywithrating : function(){
-			return nodeManager.waitreadywithrating()
+			return nodeManager.waitreadywithrating().then(() => {
+
+				if(nodeManager.initednodeswithrating().length){
+					return Promise.resolve()
+				}
+
+				return Promise.reject('emptynodes')
+
+			})
 		}
 	}
 
