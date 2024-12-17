@@ -461,8 +461,8 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 		},
 
 
-		sendwithprivatekey: function ({ address, amount, key }) {
-			return wallet.kit.sendwithprivatekey(address, amount, key)
+		sendwithprivatekey: function ({ address, amount, key, feemode }) {
+			return wallet.kit.sendwithprivatekey(address, amount, key, feemode)
 		},
 
 		getunspentswithprivatekey: function ({ key }) {
