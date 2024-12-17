@@ -687,6 +687,10 @@ var Proxy = function (settings, manage, test, logger, reverseproxy) {
 
 		chain : function(){
 			return nodeManager.currentChainCommon2()
+		},
+
+		waitreadywithrating : function(){
+			return nodeManager.waitreadywithrating()
 		}
 	}
 
