@@ -19,12 +19,12 @@
     "dependencies": {
         "@seald-io/nedb": "4.0.4",
         "arch": "2.2.0",
-        "axios": "1.6.8",
+        "axios": "1.7.9",
         "clone-deep": "4.0.1",
         "compression": "1.7.4",
         "deep-extend": "0.6.0",
         "download-github-release": "0.3.2",
-        "express": "4.19.2",
+        "express": "4.21.2",
         "express-useragent": "1.0.15",
         "firebase-admin": "12.1.0",
         "hex-captcha": "2.0.5",
@@ -36,7 +36,6 @@
         "nodejs-base64": "1.0.3",
         "random": "2.2.0",
         "redaxios": "0.5.1",
-        "request": "2.88.2",
         "request-progress": "3.0.0",
         "socks-proxy-agent": "7.0.0",
         "svg-captcha": "1.4.0",
@@ -45,7 +44,7 @@
         "tree-kill": "1.2.2",
         "underscore": "1.13.6",
         "winston": "3.13.0",
-        "ws": "8.17.0"
+        "ws": "8.18.0"
     },
     "devDependencies": {
         "nodemon": "3.1.0",
