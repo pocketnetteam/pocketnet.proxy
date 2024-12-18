@@ -1,7 +1,7 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 process.setMaxListeners(0);
 var f = require('./functions');
-const request = require('request-promise');
+//const request = require('request-promise');
 const urls = ["https://127.0.0.1:8887/ping", "https://127.0.0.1:8887/rpc/gettags?method=gettags", "https://127.0.0.1:8887/rpc/getlastcomments?method=getlastcomments"];
 const { performance } = require('perf_hooks');
 var _ = require('underscore')
@@ -39,6 +39,8 @@ var exe = function(){
                     setTimeout(function(){
 
                         var start = performance.now()
+
+                        return Promise.reject('deprecated')
 
                         return request(url).then(r => {
 

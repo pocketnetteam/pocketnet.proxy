@@ -1,6 +1,6 @@
 
 var f = require('./functions');
-var request = require('request');
+//var request = require('request');
 var _ = require('underscore')
 
 var nremotelink = 'https://1.pocketnet.app/opengraph/parse'
@@ -119,6 +119,12 @@ var Remote = function(app){
 
 		ogs : function(uri, clbk){
 
+			if (clbk){
+				clbk({})
+			}
+
+			return
+
 			if(!uri){
 				
 				if (clbk){
@@ -173,6 +179,13 @@ var Remote = function(app){
 		},
 
 		ogf : function(uri, clbk){
+
+			if (clbk){
+				clbk({})
+			}
+
+			return
+
 
 			if(!uri){
 

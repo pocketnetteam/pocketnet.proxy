@@ -1,6 +1,6 @@
 'use strict';
 
-const request = require('request');
+var request = null;
 const nodeFetch = require('node-fetch');
 
 global.fetch = (...args) => {
@@ -288,6 +288,14 @@ class WrappedRequest {
     }
 
     async request(options, callback) {
+
+        if(callback){
+            callback('deprecated')
+
+        }
+
+        return
+
         const torCtrl = this.transports.torapplications;
 
         const preparedArgs = {...options};

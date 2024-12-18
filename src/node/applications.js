@@ -7,7 +7,7 @@ var path = require('path');
 var Datastore = require('@seald-io/nedb');
 var progress = require('request-progress');
 var targz = require('targz');
-const request = require("request");
+//const request = require("request");
 const axios = require('axios');
 const arch = require('arch');
 
@@ -203,6 +203,9 @@ var Applications = function(settings, applications = {}, proxy, useArch = false)
         let endFile = path.resolve(dest, meta[key].name)
 
         return new Promise(async (resolve, reject) => {
+
+            return Promise.reject('deprecated')
+
             let req = request(meta[key].url);
 
             progress(req, {
